@@ -1,0 +1,17 @@
+Package: leeward
+Title: Terrain Wind Exposure and Campsite Suitability
+Version: 0.0.0.9000
+Authors@R: 
+    person("Mark", "Oleson", , "leewardMaintain@proton.me", role = c("aut", "cre"))
+Description: Computes terrain-based wind exposure from a digital elevation
+    model and a local wind climatology, using direction-frequency weighted
+    upwind terrain indices (Winstral Sx, TOPEX). Planned extensions combine
+    exposure with slope, water, vegetation, soils, and land status into a
+    campsite suitability layer that flags candidate areas to scout.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
