@@ -18,6 +18,39 @@ are next.
 3. **Suitability (v0.3).** Adds canopy, soil drainage, and a user-supplied land-status
    mask, combined with explicit user-chosen weights.
 
+## Example
+
+```r
+library(leeward)
+
+dem <- terra::rast(system.file("extdata", "vesuvius_dem.tif", package = "leeward"))
+wind <- read.csv(system.file("extdata", "hts_wind.csv", package = "leeward"))
+
+freq <- wind_direction_freq(wind$drct[wind$month %in% 5:10], n_sectors = 16)
+sx <- wind_exposure(dem, freq, max_dist = 300)
+terra::plot(sx)
+```
+
+![Hillshade and Sx for the Lake Vesuvius area](man/figures/README-vesuvius.png)
+
+Positive Sx (blue) means terrain rises upwind, so the cell is sheltered from
+the prevailing May–October winds. Negative Sx (red) marks exposed ridgelines. Cells within
+`max_dist` of the DEM edge are `NA` and trimmed from the map.
+
+### Example data
+
+Both files are built by `data-raw/wayne_vesuvius.R`.
+
+- `vesuvius_dem.tif`: a 4 × 4 km area around Lake Vesuvius Recreation Area,
+  Ironton Ranger District, Wayne National Forest, Ohio, at 10 m in UTM 17N
+  (EPSG:32617). From AWS Terrain Tiles via elevatr (USGS 3DEP and other sources;
+  see the [Terrain Tiles attribution](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)).
+- `hts_wind.csv`: routine hourly observations from the Huntington, WV ASOS
+  station (HTS), about 25 km away, covering 2021–2025 with calms removed. Columns are `month`, `drct`
+  (degrees from) and `sknt` (knots). From the Iowa Environmental Mesonet via
+  riem.
+- `ridge.tif`: a synthetic ridge used in function examples.
+
 ## Direction convention
 
 Degrees, the direction the wind blows **from**, 0 = north, clockwise.
