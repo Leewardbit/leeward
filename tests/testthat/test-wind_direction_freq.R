@@ -43,7 +43,10 @@ test_that("speed classes split counts and frequencies still sum to 1", {
 
 test_that("speeds outside the breaks are dropped with a warning", {
   expect_snapshot(
-    f <- wind_direction_freq(c(0, 90), speed = c(1, 50), speed_breaks = c(0, 10))
+    f <- wind_direction_freq(
+      c(0, 90),
+      speed = c(1, 50), speed_breaks = c(0, 10)
+    )
   )
   expect_equal(sum(f$count), 1)
 })

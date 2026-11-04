@@ -7,10 +7,10 @@
 topex(dem, max_dist = 500, n_directions = 8, declination = TRUE)
 }
 \arguments{
-\item{dem}{Single-layer \code{SpatRaster} of elevation in metres, in a
-projected CRS with metre units.}
+\item{dem}{Single-layer \code{SpatRaster} of elevation in meters, in a
+projected CRS with meter units.}
 
-\item{max_dist}{Search distance in metres.}
+\item{max_dist}{Search distance in meters.}
 
 \item{n_directions}{Number of directions, a whole number >= 4, starting at
 north and evenly spaced clockwise.}

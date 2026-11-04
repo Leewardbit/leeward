@@ -10,7 +10,8 @@ aoi <- terra::buffer(terra::project(aoi_lonlat, "EPSG:32617"), width = 2000)
 
 # elevatr wants an sf/sp object; z = 13 is about 12 m at this latitude.
 dem_raw <- elevatr::get_elev_raster(
-  sf::st_as_sf(aoi), z = 13, clip = "bbox", src = "aws"
+  sf::st_as_sf(aoi),
+  z = 13, clip = "bbox", src = "aws"
 )
 dem <- terra::project(
   terra::rast(dem_raw),

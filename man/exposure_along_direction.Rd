@@ -7,13 +7,13 @@
 exposure_along_direction(dem, direction, max_dist)
 }
 \arguments{
-\item{dem}{Single-layer \code{SpatRaster} of elevation in metres, in a
-projected CRS with metre units.}
+\item{dem}{Single-layer \code{SpatRaster} of elevation in meters, in a
+projected CRS with meter units.}
 
 \item{direction}{Wind direction in degrees the wind blows \strong{from},
 0 = north, clockwise.}
 
-\item{max_dist}{Upwind search distance in metres. If missing, chosen by
+\item{max_dist}{Upwind search distance in meters. If missing, chosen by
 \code{\link[=suggest_max_dist]{suggest_max_dist()}} with a message.}
 }
 \value{
@@ -26,7 +26,7 @@ angle from the cell to any upwind cell within \code{max_dist}. Positive values
 are sheltered (terrain rises upwind); negative values are exposed.
 }
 \details{
-The upwind line is sampled at one-cell steps using nearest-neighbour
+The upwind line is sampled at one-cell steps using nearest-neighbor
 lookup. Cells whose search line leaves the DEM, or whose own elevation is
 \code{NA}, return \code{NA}. \code{NA} cells along the line are skipped.
 }

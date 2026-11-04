@@ -7,13 +7,13 @@
 wind_exposure(dem, wind_freq, max_dist)
 }
 \arguments{
-\item{dem}{Single-layer \code{SpatRaster} of elevation in metres, in a
-projected CRS with metre units.}
+\item{dem}{Single-layer \code{SpatRaster} of elevation in meters, in a
+projected CRS with meter units.}
 
 \item{wind_freq}{Data frame from \code{\link[=wind_direction_freq]{wind_direction_freq()}}, or any data
 frame with \code{sector_center} (degrees) and \code{frequency} columns.}
 
-\item{max_dist}{Upwind search distance in metres. If missing, chosen by
+\item{max_dist}{Upwind search distance in meters. If missing, chosen by
 \code{\link[=suggest_max_dist]{suggest_max_dist()}} with a message.}
 }
 \value{
@@ -21,7 +21,7 @@ Single-layer \code{SpatRaster} named \code{sx}: the weighted mean Sx in
 degrees. Positive values are sheltered from the prevailing winds.
 }
 \description{
-Computes \code{\link[=exposure_along_direction]{exposure_along_direction()}} at each sector centre and combines
+Computes \code{\link[=exposure_along_direction]{exposure_along_direction()}} at each sector center and combines
 the results, weighting each by how often the wind blows from that sector.
 Sectors with zero frequency are skipped. If \code{wind_freq} has speed classes,
 frequencies are summed over classes.

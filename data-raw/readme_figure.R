@@ -20,12 +20,18 @@ pal <- grDevices::hcl.colors(101, "Blue-Red 3", rev = TRUE)
 
 grDevices::png("man/figures/README-vesuvius.png", 1600, 760, res = 150)
 graphics::par(mfrow = c(1, 2))
-terra::plot(hill, col = grDevices::grey(0:100 / 100), legend = FALSE,
-            axes = FALSE, mar = c(1, 1, 2.5, 4),
-            main = "Lake Vesuvius area, Wayne NF")
-terra::plot(sx_plot, col = pal, range = c(-lim, lim), axes = FALSE,
-            mar = c(1, 1, 2.5, 4), type = "continuous",
-            main = "Sx (deg), May-Oct winds at HTS")
-terra::plot(hill, col = grDevices::grey(0:100 / 100, alpha = 0.3),
-            legend = FALSE, axes = FALSE, add = TRUE)
+terra::plot(hill,
+  col = grDevices::grey(0:100 / 100), legend = FALSE,
+  axes = FALSE, mar = c(1, 1, 2.5, 4),
+  main = "Lake Vesuvius area, Wayne NF"
+)
+terra::plot(sx_plot,
+  col = pal, range = c(-lim, lim), axes = FALSE,
+  mar = c(1, 1, 2.5, 4), type = "continuous",
+  main = "Sx (deg), May-Oct winds at HTS"
+)
+terra::plot(hill,
+  col = grDevices::grey(0:100 / 100, alpha = 0.3),
+  legend = FALSE, axes = FALSE, add = TRUE
+)
 grDevices::dev.off()

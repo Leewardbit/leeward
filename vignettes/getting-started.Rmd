@@ -1,0 +1,104 @@
+---
+title: "Getting started with leeward"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with leeward}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 5)
+```
+
+leeward maps how sheltered terrain is from the wind. This vignette uses the
+bundled example data, a 10 m DEM around Lake Vesuvius Recreation Area
+(Wayne National Forest, Ohio) and five years of hourly winds from the
+Huntington, WV ASOS station, so it runs offline.
+
+Results identify **candidate areas to scout**, not safe campsites. Sheltered
+hollows can flood, collect cold air, or sit under dead trees. Check current
+rules with the managing agency.
+
+```{r setup}
+library(leeward)
+
+dem <- terra::rast(system.file("extdata", "vesuvius_dem.tif", package = "leeward"))
+wind <- read.csv(system.file("extdata", "hts_wind.csv", package = "leeward"))
+```
+
+## Wind climatology
+
+Directions are degrees the wind blows **from**, 0 = north, clockwise. Filter
+to the season you camp in before binning.
+
+```{r}
+summer <- wind[wind$month %in% 5:10, ]
+freq <- wind_direction_freq(summer$drct, n_sectors = 16)
+head(freq[order(-freq$frequency), ])
+```
+
+Speed classes are available if you want to see whether strong winds come
+from different directions than light ones:
+
+```{r}
+by_speed <- wind_direction_freq(
+  summer$drct,
+  n_sectors = 8,
+  speed = summer$sknt,
+  speed_breaks = c(0, 5, 10, Inf)
+)
+xtabs(frequency ~ sector_center + speed_class, by_speed)
+```
+
+## Shelter from one direction
+
+`exposure_along_direction()` computes the Winstral Sx index: the steepest
+angle from each cell up (or down) to terrain within `max_dist` upwind.
+Positive values are sheltered.
+
+```{r}
+sx_ssw <- exposure_along_direction(dem, direction = 202.5, max_dist = 300)
+terra::plot(sx_ssw, main = "Sx, wind from SSW")
+```
+
+## Choosing max_dist
+
+`max_dist` should roughly match the distance from where you would camp to
+the nearest upwind ridgeline. If you leave it out, leeward picks a value from
+the DEM's local relief and says so:
+
+```{r}
+suggest_max_dist(dem)
+```
+
+## Frequency-weighted shelter
+
+`wind_exposure()` weights each sector's Sx by how often the wind blows from
+it. Cells within `max_dist` of the DEM edge are `NA`, so clip your DEM with a
+buffer of at least `max_dist` around the area you care about.
+
+```{r}
+sx <- wind_exposure(dem, freq, max_dist = 300)
+terra::plot(sx, main = "Sx, May-October winds")
+```
+
+## TOPEX
+
+When no nearby wind record exists, `topex()` sums skyline angles over eight
+directions with equal weight. The 500 m default distance follows Quine and
+White (1998).
+
+```{r}
+tx <- topex(dem)
+terra::plot(tx, main = "TOPEX, 500 m")
+```
+
+## References
+
+Quine, C. P., & White, I. M. S. (1998). The potential of distance-limited
+topex in the prediction of site windiness. *Forestry*, 71(4), 325–332.
+
+Winstral, A., Elder, K., & Davis, R. E. (2002). Spatial snow modeling of
+wind-redistributed snow using terrain-based parameters. *Journal of
+Hydrometeorology*, 3(5), 524–538.

@@ -4,15 +4,15 @@
 #' angle from the cell to any upwind cell within `max_dist`. Positive values
 #' are sheltered (terrain rises upwind); negative values are exposed.
 #'
-#' The upwind line is sampled at one-cell steps using nearest-neighbour
+#' The upwind line is sampled at one-cell steps using nearest-neighbor
 #' lookup. Cells whose search line leaves the DEM, or whose own elevation is
 #' `NA`, return `NA`. `NA` cells along the line are skipped.
 #'
-#' @param dem Single-layer `SpatRaster` of elevation in metres, in a
-#'   projected CRS with metre units.
+#' @param dem Single-layer `SpatRaster` of elevation in meters, in a
+#'   projected CRS with meter units.
 #' @param direction Wind direction in degrees the wind blows **from**,
 #'   0 = north, clockwise.
-#' @param max_dist Upwind search distance in metres. If missing, chosen by
+#' @param max_dist Upwind search distance in meters. If missing, chosen by
 #'   [suggest_max_dist()] with a message.
 #'
 #' @return Single-layer `SpatRaster` named `sx`, in degrees, on the grid of
@@ -104,7 +104,7 @@ check_dem <- function(dem, call = rlang::caller_env()) {
   if (terra::is.lonlat(dem)) {
     cli::cli_abort(
       c(
-        "{.arg dem} must use a projected CRS with metre units.",
+        "{.arg dem} must use a projected CRS with meter units.",
         "i" = "Reproject with {.code terra::project(dem, \"EPSG:<utm zone>\")}."
       ),
       call = call
@@ -114,10 +114,11 @@ check_dem <- function(dem, call = rlang::caller_env()) {
 }
 
 check_direction <- function(direction, call = rlang::caller_env()) {
-  if (!is.numeric(direction) || length(direction) != 1 ||
-    !is.finite(direction)) {
+  ok <- is.numeric(direction) && length(direction) == 1 && is.finite(direction)
+  if (!ok) {
     cli::cli_abort(
-      "{.arg direction} must be a single finite number of degrees, not {.val {direction}}.",
+      "{.arg direction} must be a single finite number of degrees,
+       not {.val {direction}}.",
       call = call
     )
   }

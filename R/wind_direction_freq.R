@@ -1,7 +1,7 @@
 #' Bin wind directions into compass sectors
 #'
 #' Returns the relative frequency of wind directions in `n_sectors`
-#' equal-width sectors, optionally split by speed class. Sector 1 is centred
+#' equal-width sectors, optionally split by speed class. Sector 1 is centered
 #' on north; with 16 sectors it spans 348.75 to 11.25 degrees.
 #'
 #' Directions are degrees the wind blows **from**, 0 = north, clockwise.
@@ -91,15 +91,18 @@ bin_speed <- function(speed, speed_breaks, n, call = rlang::caller_env()) {
   check_numeric(speed, call = call)
   if (length(speed) != n) {
     cli::cli_abort(
-      "{.arg speed} must have the same length as {.arg dir} ({n}), not {length(speed)}.",
+      "{.arg speed} must have the same length as {.arg dir} ({n}),
+       not {length(speed)}.",
       call = call
     )
   }
-  if (!is.numeric(speed_breaks) || length(speed_breaks) < 2 ||
-    is.unsorted(speed_breaks, strictly = TRUE)) {
+  ok <- is.numeric(speed_breaks) && length(speed_breaks) >= 2 &&
+    !is.unsorted(speed_breaks, strictly = TRUE)
+  if (!ok) {
     cli::cli_abort(
       c(
-        "{.arg speed_breaks} must be a strictly increasing numeric vector of length >= 2.",
+        "{.arg speed_breaks} must be a strictly increasing numeric vector of
+         length >= 2.",
         "i" = "It is required when {.arg speed} is supplied."
       ),
       call = call

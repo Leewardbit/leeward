@@ -1,6 +1,6 @@
 #' Frequency-weighted terrain shelter
 #'
-#' Computes [exposure_along_direction()] at each sector centre and combines
+#' Computes [exposure_along_direction()] at each sector center and combines
 #' the results, weighting each by how often the wind blows from that sector.
 #' Sectors with zero frequency are skipped. If `wind_freq` has speed classes,
 #' frequencies are summed over classes.
@@ -61,8 +61,9 @@ check_wind_freq <- function(wind_freq, call = rlang::caller_env()) {
       call = call
     )
   }
-  if (anyNA(wind_freq$frequency) || any(wind_freq$frequency < 0) ||
-    sum(wind_freq$frequency) <= 0) {
+  freq <- wind_freq$frequency
+  ok <- !anyNA(freq) && all(freq >= 0) && sum(freq) > 0
+  if (!ok) {
     cli::cli_abort(
       "{.field frequency} must be non-negative with a positive sum.",
       call = call

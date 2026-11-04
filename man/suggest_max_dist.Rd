@@ -7,12 +7,12 @@
 suggest_max_dist(dem)
 }
 \arguments{
-\item{dem}{Single-layer \code{SpatRaster} of elevation in metres, in a
-projected CRS with metre units.}
+\item{dem}{Single-layer \code{SpatRaster} of elevation in meters, in a
+projected CRS with meter units.}
 }
 \value{
-A list with \code{max_dist} (metres), \code{relief} (median local relief,
-metres), and \code{terrain} (tier label).
+A list with \code{max_dist} (meters), \code{relief} (median local relief,
+meters), and \code{terrain} (tier label).
 }
 \description{
 Returns a starting value for \code{max_dist} based on the DEM's median local

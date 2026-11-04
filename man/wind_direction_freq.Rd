@@ -25,7 +25,7 @@ and \code{frequency} (sums to 1).
 }
 \description{
 Returns the relative frequency of wind directions in \code{n_sectors}
-equal-width sectors, optionally split by speed class. Sector 1 is centred
+equal-width sectors, optionally split by speed class. Sector 1 is centered
 on north; with 16 sectors it spans 348.75 to 11.25 degrees.
 }
 \details{

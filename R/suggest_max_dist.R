@@ -16,8 +16,8 @@
 #'
 #' @inheritParams exposure_along_direction
 #'
-#' @return A list with `max_dist` (metres), `relief` (median local relief,
-#'   metres), and `terrain` (tier label).
+#' @return A list with `max_dist` (meters), `relief` (median local relief,
+#'   meters), and `terrain` (tier label).
 #'
 #' @examples
 #' dem <- terra::rast(system.file("extdata", "ridge.tif", package = "leeward"))
@@ -54,9 +54,12 @@ resolve_max_dist <- function(dem, max_dist, is_missing,
     s <- suggest_max_dist(dem)
     cli::cli_inform(
       c(
-        "Using {.code max_dist = {s$max_dist}} m ({s$terrain}; median local relief {round(s$relief)} m).",
-        "i" = "Set {.arg max_dist} to the typical distance from a campsite to the nearest upwind ridgeline in your area.",
-        "i" = "Rough guide: 200 m rolling hills, 300 m dissected hills, 500 m mountains. See {.fn leeward::suggest_max_dist}."
+        "Using {.code max_dist = {s$max_dist}} m ({s$terrain}; median local
+         relief {round(s$relief)} m).",
+        "i" = "Set {.arg max_dist} to the typical distance from a campsite to
+               the nearest upwind ridgeline in your area.",
+        "i" = "Rough guide: 200 m rolling hills, 300 m dissected hills, 500 m
+               mountains. See {.fn leeward::suggest_max_dist}."
       ),
       class = "leeward_max_dist_default",
       .frequency = "regularly",
@@ -65,10 +68,12 @@ resolve_max_dist <- function(dem, max_dist, is_missing,
     max_dist <- s$max_dist
   }
   step <- min(terra::res(dem))
-  if (!is.numeric(max_dist) || length(max_dist) != 1 ||
-    !is.finite(max_dist) || max_dist < step) {
+  ok <- is.numeric(max_dist) && length(max_dist) == 1 &&
+    is.finite(max_dist) && max_dist >= step
+  if (!ok) {
     cli::cli_abort(
-      "{.arg max_dist} must be a single number >= the DEM resolution ({step} m), not {.val {max_dist}}.",
+      "{.arg max_dist} must be a single number >= the DEM resolution
+       ({step} m), not {.val {max_dist}}.",
       call = call
     )
   }

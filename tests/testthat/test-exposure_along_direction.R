@@ -59,7 +59,10 @@ test_that("missing max_dist uses a terrain-based default with a message", {
 test_that("invalid inputs give informative errors", {
   dem <- dem_from_matrix(matrix(1, 4, 6))
   lonlat <- terra::rast(matrix(1, 4, 6), crs = "EPSG:4326")
-  expect_snapshot(exposure_along_direction(matrix(1, 3, 3), 0, 10), error = TRUE)
+  expect_snapshot(
+    exposure_along_direction(matrix(1, 3, 3), 0, 10),
+    error = TRUE
+  )
   expect_snapshot(exposure_along_direction(c(dem, dem), 0, 10), error = TRUE)
   expect_snapshot(exposure_along_direction(lonlat, 0, 10), error = TRUE)
   expect_snapshot(exposure_along_direction(dem, NA, 10), error = TRUE)

@@ -1,0 +1,13 @@
+url: ~
+template:
+  bootstrap: 5
+reference:
+  - title: Wind climatology
+    contents:
+      - wind_direction_freq
+  - title: Terrain exposure
+    contents:
+      - exposure_along_direction
+      - wind_exposure
+      - topex
+      - suggest_max_dist

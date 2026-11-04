@@ -23,7 +23,8 @@ test_that("sectors are combined as a frequency-weighted mean", {
 test_that("speed classes are summed per sector", {
   dem <- dem_from_matrix(matrix(1, 6, 6))
   freq <- wind_direction_freq(
-    c(0, 0, 90), speed = c(1, 8, 3), speed_breaks = c(0, 5, 10), n_sectors = 4
+    c(0, 0, 90),
+    speed = c(1, 8, 3), speed_breaks = c(0, 5, 10), n_sectors = 4
   )
   expect_equal(names(wind_exposure(dem, freq, max_dist = 10)), "sx")
 })

@@ -20,7 +20,7 @@
       exposure_along_direction(lonlat, 0, 10)
     Condition
       Error in `exposure_along_direction()`:
-      ! `dem` must use a projected CRS with metre units.
+      ! `dem` must use a projected CRS with meter units.
       i Reproject with `terra::project(dem, "EPSG:<utm zone>")`.
 
 ---

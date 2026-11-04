@@ -15,7 +15,7 @@
 #' Cells whose search line leaves the DEM in any direction return `NA`.
 #'
 #' @inheritParams exposure_along_direction
-#' @param max_dist Search distance in metres.
+#' @param max_dist Search distance in meters.
 #' @param n_directions Number of directions, a whole number >= 4, starting at
 #'   north and evenly spaced clockwise.
 #' @param declination If `TRUE`, negative angles count; if `FALSE`, they
