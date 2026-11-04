@@ -58,7 +58,9 @@ resolve_max_dist <- function(dem, max_dist, is_missing,
         "i" = "Set {.arg max_dist} to the typical distance from a campsite to the nearest upwind ridgeline in your area.",
         "i" = "Rough guide: 200 m rolling hills, 300 m dissected hills, 500 m mountains. See {.fn leeward::suggest_max_dist}."
       ),
-      class = "leeward_max_dist_default"
+      class = "leeward_max_dist_default",
+      .frequency = "regularly",
+      .frequency_id = "leeward_max_dist_default"
     )
     max_dist <- s$max_dist
   }

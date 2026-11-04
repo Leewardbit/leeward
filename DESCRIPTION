@@ -5,7 +5,7 @@ Authors@R:
     person("Mark", "Oleson", , "leewardMaintain@proton.me", role = c("aut", "cre"))
 Description: Computes terrain-based wind exposure from a digital elevation
     model and a local wind climatology, using direction-frequency weighted
-    upwind terrain indices (Winstral Sx, TOPEX). Planned extensions combine
+    upwind terrain indices (Winstral Sx; TOPEX planned). Planned extensions combine
     exposure with slope, water, vegetation, soils, and land status into a
     campsite suitability layer that flags candidate areas to scout.
 License: MIT + file LICENSE

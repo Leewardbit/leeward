@@ -39,6 +39,7 @@ terra::plot(sx)
 Winstral, A., Elder, K., & Davis, R. E. (2002). Spatial snow modeling of
 wind-redistributed snow using terrain-based parameters. \emph{Journal of
 Hydrometeorology}, 3(5), 524--538.
+\doi{10.1175/1525-7541(2002)003<0524:SSMOWR>2.0.CO;2}
 }
 \seealso{
 \code{\link[=wind_exposure]{wind_exposure()}} to combine directions using a wind climatology.

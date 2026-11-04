@@ -3,14 +3,17 @@
 > Find sheltered, flat, legal, well-drained places to camp, built on a
 > transparent, well-documented terrain wind exposure model.
 
-**Status:** early development (v0.1 in progress). Only
-`wind_direction_freq()` is implemented so far.
+**Status:** early development (v0.1 in progress). Implemented:
+`wind_direction_freq()`, `exposure_along_direction()` (Winstral Sx),
+`wind_exposure()`, and `suggest_max_dist()`. TOPEX and a real-data example
+are next.
 
-## What it does (planned)
+## What it does
 
 1. **Wind exposure (v0.1).** Computes terrain-based exposure from a DEM and a
-   local wind climatology: the Winstral *Sx* upwind-slope index (default) and
-   TOPEX, combined across directions weighted by frequency.
+   local wind climatology: the Winstral *Sx* upwind-slope index, combined
+   across directions weighted by frequency. TOPEX is planned as an
+   alternative.
 2. **Terrain and water (v0.2).** Adds slope/flatness, aspect, and distance to water with a setback.
 3. **Suitability (v0.3).** Adds canopy, soil drainage, and a user-supplied land-status
    mask, combined with explicit user-chosen weights.
