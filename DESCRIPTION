@@ -11,7 +11,14 @@ Description: Computes terrain-based wind exposure from a digital elevation
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
-Suggests: 
+Depends:
+    R (>= 4.1)
+Imports:
+    cli,
+    rlang,
+    stats,
+    terra
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1

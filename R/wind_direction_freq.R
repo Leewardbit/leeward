@@ -1,31 +1,23 @@
 #' Bin wind directions into compass sectors
 #'
-#' Bins observed wind directions into `n_sectors` equal-width compass sectors
-#' and returns the relative frequency of each sector. Sector 1 is centred on
-#' north (0 degrees), so with 16 sectors it spans 348.75 to 11.25 degrees.
+#' Returns the relative frequency of wind directions in `n_sectors`
+#' equal-width sectors, optionally split by speed class. Sector 1 is centred
+#' on north; with 16 sectors it spans 348.75 to 11.25 degrees.
 #'
-#' **Direction convention:** degrees, the direction the wind blows *from*,
-#' 0 = north, increasing clockwise. Values outside `[0, 360)` are wrapped,
-#' so 360 and -10 are treated as 0 and 350.
+#' Directions are degrees the wind blows **from**, 0 = north, clockwise.
+#' Values outside `[0, 360)` are wrapped, so 360 and -10 become 0 and 350.
 #'
-#' @param dir Numeric vector of wind directions in degrees (direction the
-#'   wind blows FROM). `NA` values are dropped.
-#' @param n_sectors Whole number of sectors, at least 4 (default 16).
+#' @param dir Numeric vector of wind directions in degrees. `NA`s are dropped.
+#' @param n_sectors Number of sectors; a whole number >= 4.
 #' @param speed Optional numeric vector of wind speeds, the same length as
-#'   `dir`. If supplied, frequencies are also split by speed class.
-#' @param speed_breaks Numeric vector of break points for the speed classes,
-#'   passed to [cut()] with `right = FALSE`. Required when `speed` is
-#'   supplied. Speeds outside the breaks are dropped with a warning.
+#'   `dir`.
+#' @param speed_breaks Strictly increasing break points for speed classes,
+#'   passed to [cut()] with `right = FALSE`. Required when `speed` is given.
+#'   Observations outside the breaks are dropped with a warning.
 #'
-#' @return A data frame with one row per sector (or per sector x speed
-#'   class) and columns:
-#'   \describe{
-#'     \item{sector}{Sector index, 1 = north.}
-#'     \item{sector_center}{Sector centre in degrees.}
-#'     \item{speed_class}{Factor of speed classes (only if `speed` is given).}
-#'     \item{count}{Number of observations.}
-#'     \item{frequency}{Proportion of all retained observations; sums to 1.}
-#'   }
+#' @return A data frame with columns `sector` (1 = north), `sector_center`
+#'   (degrees), `speed_class` (factor; only when `speed` is given), `count`,
+#'   and `frequency` (sums to 1).
 #'
 #' @examples
 #' wind_direction_freq(c(350, 10, 5, 355, 90, 180), n_sectors = 8)
@@ -37,76 +29,89 @@
 #'   n_sectors = 4
 #' )
 #' @export
-wind_direction_freq <- function(dir, n_sectors = 16, speed = NULL,
-                                 speed_breaks = NULL) {
-  if (!is.numeric(dir)) {
-    stop("`dir` must be a numeric vector of directions in degrees.",
-         call. = FALSE)
-  }
-  if (!is.numeric(n_sectors) || length(n_sectors) != 1 ||
-      is.na(n_sectors) || n_sectors < 4 || n_sectors != round(n_sectors)) {
-    stop("`n_sectors` must be a single whole number >= 4.", call. = FALSE)
-  }
-  n_sectors <- as.integer(n_sectors)
-
-  has_speed <- !is.null(speed)
-  if (has_speed) {
-    if (!is.numeric(speed) || length(speed) != length(dir)) {
-      stop("`speed` must be a numeric vector the same length as `dir`.",
-           call. = FALSE)
-    }
-    if (is.null(speed_breaks) || !is.numeric(speed_breaks) ||
-        length(speed_breaks) < 2 || is.unsorted(speed_breaks, strictly = TRUE)) {
-      stop("`speed_breaks` must be a strictly increasing numeric vector of ",
-           "length >= 2 when `speed` is supplied.", call. = FALSE)
-    }
-  } else if (!is.null(speed_breaks)) {
-    warning("`speed_breaks` ignored because `speed` is NULL.", call. = FALSE)
-  }
-
+wind_direction_freq <- function(dir,
+                                n_sectors = 16,
+                                speed = NULL,
+                                speed_breaks = NULL) {
+  check_numeric(dir)
+  check_whole_number(n_sectors, min = 4)
   if (any(is.infinite(dir))) {
-    stop("`dir` contains infinite values.", call. = FALSE)
+    cli::cli_abort("{.arg dir} must not contain infinite values.")
   }
 
   keep <- !is.na(dir)
-  if (has_speed) {
-    speed_class <- cut(speed, breaks = speed_breaks, right = FALSE)
-    out_of_range <- keep & !is.na(speed) & is.na(speed_class)
-    if (any(out_of_range)) {
-      warning(sum(out_of_range), " observation(s) with speed outside ",
-              "`speed_breaks` dropped.", call. = FALSE)
-    }
+  speed_class <- NULL
+  if (!is.null(speed)) {
+    speed_class <- bin_speed(speed, speed_breaks, n = length(dir))
     keep <- keep & !is.na(speed_class)
+  } else if (!is.null(speed_breaks)) {
+    cli::cli_warn("{.arg speed_breaks} is ignored when {.arg speed} is NULL.")
   }
   if (!any(keep)) {
-    stop("No usable (non-missing) observations supplied.", call. = FALSE)
+    cli::cli_abort("No usable observations: all are missing or out of range.")
   }
 
-  width  <- 360 / n_sectors
-  sector <- floor((((dir[keep] %% 360) + width / 2) %% 360) / width) + 1L
-  # Guard against floating-point edge cases landing in sector n + 1.
-  sector[sector > n_sectors] <- 1L
-  centers <- (seq_len(n_sectors) - 1) * width
+  sector <- direction_to_sector(dir[keep], n_sectors)
+  centers <- (seq_len(n_sectors) - 1) * 360 / n_sectors
 
-  if (!has_speed) {
+  if (is.null(speed_class)) {
     counts <- tabulate(sector, nbins = n_sectors)
     return(data.frame(
-      sector        = seq_len(n_sectors),
+      sector = seq_len(n_sectors),
       sector_center = centers,
-      count         = counts,
-      frequency     = counts / sum(counts)
+      count = counts,
+      frequency = counts / sum(counts)
     ))
   }
 
-  sc  <- speed_class[keep]
-  tab <- table(factor(sector, levels = seq_len(n_sectors)), sc)
-  out <- data.frame(
-    sector        = rep(seq_len(n_sectors), times = nlevels(sc)),
-    sector_center = rep(centers, times = nlevels(sc)),
-    speed_class   = factor(rep(levels(sc), each = n_sectors),
-                           levels = levels(sc)),
-    count         = as.vector(tab)
+  speed_class <- speed_class[keep]
+  n_classes <- nlevels(speed_class)
+  counts <- table(factor(sector, levels = seq_len(n_sectors)), speed_class)
+  data.frame(
+    sector = rep(seq_len(n_sectors), times = n_classes),
+    sector_center = rep(centers, times = n_classes),
+    speed_class = factor(
+      rep(levels(speed_class), each = n_sectors),
+      levels = levels(speed_class)
+    ),
+    count = as.vector(counts),
+    frequency = as.vector(counts) / sum(counts)
   )
-  out$frequency <- out$count / sum(out$count)
-  out
+}
+
+direction_to_sector <- function(dir, n_sectors) {
+  width <- 360 / n_sectors
+  sector <- floor(((dir %% 360 + width / 2) %% 360) / width) + 1L
+  # Floating-point rounding can push a value just below 360 into sector n + 1.
+  sector[sector > n_sectors] <- 1L
+  sector
+}
+
+bin_speed <- function(speed, speed_breaks, n, call = rlang::caller_env()) {
+  check_numeric(speed, call = call)
+  if (length(speed) != n) {
+    cli::cli_abort(
+      "{.arg speed} must have the same length as {.arg dir} ({n}), not {length(speed)}.",
+      call = call
+    )
+  }
+  if (!is.numeric(speed_breaks) || length(speed_breaks) < 2 ||
+    is.unsorted(speed_breaks, strictly = TRUE)) {
+    cli::cli_abort(
+      c(
+        "{.arg speed_breaks} must be a strictly increasing numeric vector of length >= 2.",
+        "i" = "It is required when {.arg speed} is supplied."
+      ),
+      call = call
+    )
+  }
+  speed_class <- cut(speed, breaks = speed_breaks, right = FALSE)
+  n_out <- sum(!is.na(speed) & is.na(speed_class))
+  if (n_out > 0) {
+    cli::cli_warn(
+      "Dropped {n_out} observation{?s} with speed outside {.arg speed_breaks}.",
+      call = call
+    )
+  }
+  speed_class
 }

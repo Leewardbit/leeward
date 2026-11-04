@@ -7,38 +7,30 @@
 wind_direction_freq(dir, n_sectors = 16, speed = NULL, speed_breaks = NULL)
 }
 \arguments{
-\item{dir}{Numeric vector of wind directions in degrees (direction the
-wind blows FROM). \code{NA} values are dropped.}
+\item{dir}{Numeric vector of wind directions in degrees. \code{NA}s are dropped.}
 
-\item{n_sectors}{Whole number of sectors, at least 4 (default 16).}
+\item{n_sectors}{Number of sectors; a whole number >= 4.}
 
 \item{speed}{Optional numeric vector of wind speeds, the same length as
-\code{dir}. If supplied, frequencies are also split by speed class.}
+\code{dir}.}
 
-\item{speed_breaks}{Numeric vector of break points for the speed classes,
-passed to \code{\link[=cut]{cut()}} with \code{right = FALSE}. Required when \code{speed} is
-supplied. Speeds outside the breaks are dropped with a warning.}
+\item{speed_breaks}{Strictly increasing break points for speed classes,
+passed to \code{\link[=cut]{cut()}} with \code{right = FALSE}. Required when \code{speed} is given.
+Observations outside the breaks are dropped with a warning.}
 }
 \value{
-A data frame with one row per sector (or per sector x speed
-class) and columns:
-\describe{
-\item{sector}{Sector index, 1 = north.}
-\item{sector_center}{Sector centre in degrees.}
-\item{speed_class}{Factor of speed classes (only if \code{speed} is given).}
-\item{count}{Number of observations.}
-\item{frequency}{Proportion of all retained observations; sums to 1.}
-}
+A data frame with columns \code{sector} (1 = north), \code{sector_center}
+(degrees), \code{speed_class} (factor; only when \code{speed} is given), \code{count},
+and \code{frequency} (sums to 1).
 }
 \description{
-Bins observed wind directions into \code{n_sectors} equal-width compass sectors
-and returns the relative frequency of each sector. Sector 1 is centred on
-north (0 degrees), so with 16 sectors it spans 348.75 to 11.25 degrees.
+Returns the relative frequency of wind directions in \code{n_sectors}
+equal-width sectors, optionally split by speed class. Sector 1 is centred
+on north; with 16 sectors it spans 348.75 to 11.25 degrees.
 }
 \details{
-\strong{Direction convention:} degrees, the direction the wind blows \emph{from},
-0 = north, increasing clockwise. Values outside \verb{[0, 360)} are wrapped,
-so 360 and -10 are treated as 0 and 350.
+Directions are degrees the wind blows \strong{from}, 0 = north, clockwise.
+Values outside \verb{[0, 360)} are wrapped, so 360 and -10 become 0 and 350.
 }
 \examples{
 wind_direction_freq(c(350, 10, 5, 355, 90, 180), n_sectors = 8)
