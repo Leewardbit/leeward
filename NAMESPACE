@@ -2,5 +2,6 @@
 
 export(exposure_along_direction)
 export(suggest_max_dist)
+export(topex)
 export(wind_direction_freq)
 export(wind_exposure)
