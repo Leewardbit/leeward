@@ -1,5 +1,9 @@
 # leeward
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/Leewardbit/leeward/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Leewardbit/leeward/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 > Find sheltered, flat, legal, well-drained places to camp, built on a
 > transparent, well-documented terrain wind exposure model.
 
