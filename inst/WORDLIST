@@ -10,6 +10,7 @@ Hillshade
 Hydrometeorology
 Ironton
 Mesonet
+NHD
 Plattner
 RSAGA's
 Rsagacmd
@@ -27,12 +28,18 @@ drainages
 elevatr
 et
 extRemes
+flowlines
+headwater
+lidar
 openair
 ridgeline
 ridgelines
 riem
 terra
+terra's
 topex
+waterbodies
+waterbody
 widowmakers
 windscape
 windthrow

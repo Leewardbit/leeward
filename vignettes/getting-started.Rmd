@@ -8,7 +8,9 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 5)
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 5
+)
 ```
 
 leeward maps how sheltered terrain is from the wind. This vignette uses the
@@ -23,7 +25,9 @@ rules with the managing agency.
 ```{r setup}
 library(leeward)
 
-dem <- terra::rast(system.file("extdata", "vesuvius_dem.tif", package = "leeward"))
+dem <- terra::rast(
+  system.file("extdata", "vesuvius_dem.tif", package = "leeward")
+)
 wind <- read.csv(system.file("extdata", "hts_wind.csv", package = "leeward"))
 ```
 
@@ -82,6 +86,41 @@ buffer of at least `max_dist` around the area you care about.
 sx <- wind_exposure(dem, freq, max_dist = 300)
 terra::plot(sx, main = "Sx, May-October winds")
 ```
+
+## Terrain and water layers
+
+Suitability layers come in two kinds. **Scores** run from 0 to 1 and trade
+off against each other. **Exclusions** are hard rules: `TRUE` means a cell is
+out, however well it scores.
+
+```{r}
+flat <- flatness_score(dem, flat = 5, steep = 15)
+facing <- aspect_score(dem, preferred_aspect = 135)
+terra::plot(c(flat, facing))
+```
+
+`preferred_aspect` is the direction a slope *faces*, not a wind direction.
+
+Water access and the setback come from the same distance raster:
+
+```{r}
+gpkg <- system.file("extdata", "vesuvius_water.gpkg", package = "leeward")
+water <- list(
+  terra::vect(gpkg, layer = "flowlines"),
+  terra::vect(gpkg, layer = "waterbodies")
+)
+d <- water_distance(dem, water)
+access <- water_score(d, setback = 61, reach = 800)
+excluded <- water_exclusion(d, setback = 61)
+terra::plot(access)
+terra::plot(
+  terra::ifel(excluded, 1, NA),
+  col = "red", legend = FALSE, add = TRUE
+)
+```
+
+Mapped streams miss many small hollows that carry water after storms. A
+cell far from any mapped stream can still sit in a flash-flood channel.
 
 ## TOPEX
 

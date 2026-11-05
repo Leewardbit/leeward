@@ -1,6 +1,6 @@
 Package: leeward
 Title: Terrain Wind Exposure and Campsite Suitability
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     person("Mark", "Oleson", , "leewardMaintain@proton.me", role = c("aut", "cre"))
 Description: Computes terrain-based wind exposure from a digital elevation
@@ -22,6 +22,7 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
+    sf,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3

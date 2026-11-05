@@ -1,3 +1,15 @@
+# leeward (development version)
+
+* `flatness_score()` and `aspect_score()` score terrain from 0 to 1. The
+  aspect score fades to neutral on flat ground, where terra's aspect is
+  arbitrary.
+* `water_distance()` measures distance to the nearest stream or waterbody.
+  `water_score()` turns it into a 0--1 access score and `water_exclusion()`
+  into a hard setback mask (default 61 m / 200 ft).
+* Layers follow a convention: `*_score` (0--1, weighted later) and
+  `*_exclusion` (logical, `TRUE` = excluded).
+* New example data: `vesuvius_water.gpkg` (high-resolution NHD).
+
 # leeward 0.1.0
 
 First release: terrain wind exposure core.

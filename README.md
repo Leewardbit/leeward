@@ -3,10 +3,10 @@
 > Find sheltered, flat, legal, well-drained places to camp, built on a
 > transparent, well-documented terrain wind exposure model.
 
-**Status:** early development (v0.1 in progress). Implemented:
-`wind_direction_freq()`, `exposure_along_direction()` (Winstral Sx),
-`wind_exposure()`, `suggest_max_dist()`, and `topex()`. v0.2 (slope,
-aspect, water) is next.
+**Status:** early development. v0.1.0 (wind exposure) is released. The
+development version adds v0.2 terrain and water layers: `flatness_score()`,
+`aspect_score()`, `water_distance()`, `water_score()`, and
+`water_exclusion()`.
 
 ## What it does
 
@@ -14,7 +14,10 @@ aspect, water) is next.
    local wind climatology: the Winstral *Sx* upwind-slope index, combined
    across directions weighted by frequency. `topex()` is a
    distance-limited TOPEX alternative that needs no wind record.
-2. **Terrain and water (v0.2).** Adds slope/flatness, aspect, and distance to water with a setback.
+2. **Terrain and water (v0.2).** 0–1 scores for flatness, aspect, and
+   water access, plus a hard exclusion mask for the water setback.
+   Scores trade off against each other in a weighted sum. Exclusions
+   are rules no weighting can override.
 3. **Suitability (v0.3).** Adds canopy, soil drainage, and a user-supplied land-status
    mask, combined with explicit user-chosen weights.
 
@@ -39,7 +42,7 @@ the prevailing May–October winds. Negative Sx (red) marks exposed ridgelines. 
 
 ### Example data
 
-Both files are built by `data-raw/wayne_vesuvius.R`.
+The DEM and wind files are built by `data-raw/wayne_vesuvius.R`.
 
 - `vesuvius_dem.tif`: a 4 × 4 km area around Lake Vesuvius Recreation Area,
   Ironton Ranger District, Wayne National Forest, Ohio, at 10 m in UTM 17N
@@ -49,6 +52,12 @@ Both files are built by `data-raw/wayne_vesuvius.R`.
   station (HTS), about 25 km away, covering 2021–2025 with calms removed. Columns are `month`, `drct`
   (degrees from) and `sknt` (knots). From the Iowa Environmental Mesonet via
   riem.
+- `vesuvius_water.gpkg`: high-resolution NHD flowlines (layer
+  `flowlines`, with `flow` = perennial or intermittent) and waterbodies
+  (layer `waterbodies`) for the same area, from the USGS National Map
+  (public domain). Built by `data-raw/vesuvius_water.R`. Many small
+  side hollows have no mapped channel, though they may carry ephemeral
+  flow.
 - `ridge.tif`: a synthetic ridge used in function examples.
 
 ## Direction convention
