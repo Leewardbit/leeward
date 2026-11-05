@@ -8,6 +8,11 @@
   into a hard setback mask (default 61 m / 200 ft).
 * Layers follow a convention: `*_score` (0--1, weighted later) and
   `*_exclusion` (logical, `TRUE` = excluded).
+* `contributing_area()` fills depressions (Planchon and Darboux 2002) and
+  routes flow by D8. `height_above_channel()` gives HAND, height above the
+  DEM-derived channel each cell drains to, and `channel_exclusion()` masks
+  low ground along channels (defaults: 1 ha channel start, 3 m). This
+  covers the unmapped hollows that stream maps miss.
 * New example data: `vesuvius_water.gpkg` (high-resolution NHD).
 
 # leeward 0.1.0

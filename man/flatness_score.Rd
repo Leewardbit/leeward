@@ -37,6 +37,9 @@ terra::plot(flatness_score(dem))
 \seealso{
 Other suitability layers:
 \code{\link[=aspect_score]{aspect_score()}},
+\code{\link[=channel_exclusion]{channel_exclusion()}},
+\code{\link[=contributing_area]{contributing_area()}},
+\code{\link[=height_above_channel]{height_above_channel()}},
 \code{\link[=water_distance]{water_distance()}},
 \code{\link[=water_exclusion]{water_exclusion()}},
 \code{\link[=water_score]{water_score()}}

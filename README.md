@@ -9,8 +9,9 @@
 
 **Status:** early development. v0.1.0 (wind exposure) is released. The
 development version adds v0.2 terrain and water layers: `flatness_score()`,
-`aspect_score()`, `water_distance()`, `water_score()`, and
-`water_exclusion()`.
+`aspect_score()`, `water_distance()`, `water_score()`,
+`water_exclusion()`, and DEM-derived channels: `contributing_area()`,
+`height_above_channel()`, and `channel_exclusion()`.
 
 ## What it does
 
@@ -19,7 +20,9 @@ development version adds v0.2 terrain and water layers: `flatness_score()`,
    across directions weighted by frequency. `topex()` is a
    distance-limited TOPEX alternative that needs no wind record.
 2. **Terrain and water (v0.2).** 0–1 scores for flatness, aspect, and
-   water access, plus a hard exclusion mask for the water setback.
+   water access, plus hard exclusion masks for the water setback and for
+   low ground along channels derived from the DEM (height above the
+   nearest drainage), which also covers unmapped hollows.
    Scores trade off against each other in a weighted sum. Exclusions
    are rules no weighting can override.
 3. **Suitability (v0.3).** Adds canopy, soil drainage, and a user-supplied land-status
@@ -61,7 +64,7 @@ The DEM and wind files are built by `data-raw/wayne_vesuvius.R`.
   (layer `waterbodies`) for the same area, from the USGS National Map
   (public domain). Built by `data-raw/vesuvius_water.R`. Many small
   side hollows have no mapped channel, though they may carry ephemeral
-  flow.
+  flow; `height_above_channel()` finds them from the DEM.
 - `ridge.tif`: a synthetic ridge used in function examples.
 
 ## Direction convention

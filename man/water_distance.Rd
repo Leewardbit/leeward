@@ -43,7 +43,10 @@ terra::plot(water_distance(dem, water))
 
 Other suitability layers:
 \code{\link[=aspect_score]{aspect_score()}},
+\code{\link[=channel_exclusion]{channel_exclusion()}},
+\code{\link[=contributing_area]{contributing_area()}},
 \code{\link[=flatness_score]{flatness_score()}},
+\code{\link[=height_above_channel]{height_above_channel()}},
 \code{\link[=water_exclusion]{water_exclusion()}},
 \code{\link[=water_score]{water_score()}}
 }
