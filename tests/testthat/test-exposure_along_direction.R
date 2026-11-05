@@ -67,4 +67,5 @@ test_that("invalid inputs give informative errors", {
   expect_snapshot(exposure_along_direction(lonlat, 0, 10), error = TRUE)
   expect_snapshot(exposure_along_direction(dem, NA, 10), error = TRUE)
   expect_snapshot(exposure_along_direction(dem, 0, 5), error = TRUE)
+  expect_snapshot(exposure_along_direction(dem, 0, 1e7), error = TRUE)
 })

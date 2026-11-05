@@ -39,3 +39,12 @@
       Error in `exposure_along_direction()`:
       ! `max_dist` must be a single number >= the DEM resolution (10 m), not 5.
 
+---
+
+    Code
+      exposure_along_direction(dem, 0, 1e+07)
+    Condition
+      Error in `exposure_along_direction()`:
+      ! `max_dist` (1e+07 m) exceeds the DEM diagonal (72 m), so every cell would be "NA".
+      i Use a larger DEM or a smaller `max_dist`.
+

@@ -68,12 +68,23 @@ resolve_max_dist <- function(dem, max_dist, is_missing,
     max_dist <- s$max_dist
   }
   step <- min(terra::res(dem))
+  diagonal <- sqrt(sum((dim(dem)[2:1] * terra::res(dem))^2))
   ok <- is.numeric(max_dist) && length(max_dist) == 1 &&
     is.finite(max_dist) && max_dist >= step
   if (!ok) {
     cli::cli_abort(
       "{.arg max_dist} must be a single number >= the DEM resolution
        ({step} m), not {.val {max_dist}}.",
+      call = call
+    )
+  }
+  if (max_dist > diagonal) {
+    cli::cli_abort(
+      c(
+        "{.arg max_dist} ({max_dist} m) exceeds the DEM diagonal
+         ({round(diagonal)} m), so every cell would be {.val NA}.",
+        "i" = "Use a larger DEM or a smaller {.arg max_dist}."
+      ),
       call = call
     )
   }
