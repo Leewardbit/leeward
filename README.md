@@ -11,7 +11,9 @@
 development version adds v0.2 terrain and water layers: `flatness_score()`,
 `aspect_score()`, `water_distance()`, `water_score()`,
 `water_exclusion()`, and DEM-derived channels: `contributing_area()`,
-`height_above_channel()`, and `channel_exclusion()`.
+`height_above_channel()`, and `channel_exclusion()`. It also adds the first v0.3
+pieces: `shelter_score()`, `land_exclusion()`, `camp_suitability()`, and
+`candidate_areas()`.
 
 ## What it does
 
@@ -25,8 +27,12 @@ development version adds v0.2 terrain and water layers: `flatness_score()`,
    nearest drainage), which also covers unmapped hollows.
    Scores trade off against each other in a weighted sum. Exclusions
    are rules no weighting can override.
-3. **Suitability (v0.3).** Adds canopy, soil drainage, and a user-supplied land-status
-   mask, combined with explicit user-chosen weights.
+3. **Suitability (v0.3, in progress).** `camp_suitability()` combines the
+   scores with explicit weights (there are no defaults) and applies every
+   exclusion as a hard rule. `candidate_areas()` ranks the best patches as
+   polygons: candidate areas to scout. `land_exclusion()` turns your own
+   land-status polygons into an exclusion. Canopy and soil drainage layers
+   are next.
 
 ## Example
 

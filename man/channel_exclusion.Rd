@@ -47,9 +47,13 @@ terra::plot(channel_exclusion(height_above_channel(dem)))
 \seealso{
 Other suitability layers:
 \code{\link[=aspect_score]{aspect_score()}},
+\code{\link[=camp_suitability]{camp_suitability()}},
+\code{\link[=candidate_areas]{candidate_areas()}},
 \code{\link[=contributing_area]{contributing_area()}},
 \code{\link[=flatness_score]{flatness_score()}},
 \code{\link[=height_above_channel]{height_above_channel()}},
+\code{\link[=land_exclusion]{land_exclusion()}},
+\code{\link[=shelter_score]{shelter_score()}},
 \code{\link[=water_distance]{water_distance()}},
 \code{\link[=water_exclusion]{water_exclusion()}},
 \code{\link[=water_score]{water_score()}}

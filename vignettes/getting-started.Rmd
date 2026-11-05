@@ -145,6 +145,39 @@ The red area combines both exclusions. It is a minimum hazard area: a 10 m
 DEM cannot show narrow gullies or culverts. Cells that drain off the DEM
 without reaching a channel are `NA`, which means unknown, not safe.
 
+## Putting it together
+
+`camp_suitability()` takes a weighted mean of the scores and applies every
+exclusion as a hard rule. A cell that is `NA` in any exclusion is treated as
+excluded, because `NA` means unknown, not safe. There are no default weights:
+these are examples, so set your own for the trip.
+
+```{r}
+shelter <- shelter_score(sx, exposed = 0, sheltered = 10)
+suit <- camp_suitability(
+  scores = list(
+    shelter = shelter, flat = flat, aspect = facing, water = access
+  ),
+  weights = c(shelter = 2, flat = 3, aspect = 1, water = 1),
+  exclusions = list(excluded, low)
+)
+terra::plot(suit$suitability, main = "Suitability (example weights)")
+```
+
+`candidate_areas()` turns the best cells into ranked polygons:
+
+```{r}
+sites <- candidate_areas(suit, min_score = 0.7, min_area = 400)
+head(as.data.frame(sites))
+terra::plot(suit$suitability, main = "Candidate areas, rank 1-10")
+terra::plot(sites[sites$rank <= 10], add = TRUE, border = "red", lwd = 2)
+```
+
+These are **candidate areas to scout**, not campsites. Edge bands from
+`max_dist`, the exclusions, and the 10 m grid all limit what the model can
+see. Visit each area, check the trees overhead and the ground underfoot,
+and confirm the rules with the managing agency.
+
 ## TOPEX
 
 When no nearby wind record exists, `topex()` sums skyline angles over eight

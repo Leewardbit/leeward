@@ -30,3 +30,23 @@ pond <- function() {
     crs = "EPSG:32617"
   )
 }
+
+const <- function(value, n = 3) dem_from_matrix(matrix(value, n, n))
+
+no_exclusion <- function() const(0) == 1
+
+cell <- function(r, i) unname(terra::values(r)[i, 1])
+
+grid_4x4 <- function() {
+  terra::rast(
+    nrows = 4, ncols = 4, xmin = 0, xmax = 40, ymin = 0, ymax = 40,
+    crs = "EPSG:32617", vals = 1
+  )
+}
+
+square <- function(size) {
+  terra::vect(
+    sprintf("POLYGON ((0 0, %1$s 0, %1$s %1$s, 0 %1$s, 0 0))", size),
+    crs = "EPSG:32617"
+  )
+}

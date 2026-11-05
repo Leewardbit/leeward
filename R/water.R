@@ -129,26 +129,8 @@ as_water_list <- function(water, dem, call = rlang::caller_env()) {
     )
   }
   lapply(water, function(w) {
-    if (inherits(w, c("sf", "sfc"))) {
-      w <- terra::vect(w)
-    }
-    if (!inherits(w, "SpatVector")) {
-      cli::cli_abort(
-        "Each element of {.arg water} must be a {.cls SpatVector} or
-         {.cls sf} object, not {.obj_type_friendly {w}}.",
-        call = call
-      )
-    }
-    if (!terra::same.crs(w, dem)) {
-      cli::cli_abort(
-        c(
-          "{.arg water} must use the same CRS as {.arg dem}.",
-          "i" = "Reproject with {.code terra::project(water, dem)}."
-        ),
-        call = call
-      )
-    }
-    w
+    w <- as_spat_vector(w, arg = "water", call = call)
+    check_same_crs(w, dem, arg = "water", call = call)
   })
 }
 

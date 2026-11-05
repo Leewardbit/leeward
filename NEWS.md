@@ -13,6 +13,16 @@
   DEM-derived channel each cell drains to, and `channel_exclusion()` masks
   low ground along channels (defaults: 1 ha channel start, 3 m). This
   covers the unmapped hollows that stream maps miss.
+* `camp_suitability()` combines named 0--1 scores with explicit weights
+  (no defaults) and applies every exclusion as a hard rule. `NA` in an
+  exclusion counts as excluded. It returns `suitability` and `excluded`
+  layers.
+* `candidate_areas()` returns ranked polygons of the best patches: candidate
+  areas to scout, not campsites.
+* `shelter_score()` turns Sx or TOPEX into a 0--1 score.
+* `land_exclusion()` builds an exclusion from user-supplied allowed and
+  prohibited polygons. It errs toward exclusion and is a filter, not a
+  statement of the law.
 * New example data: `vesuvius_water.gpkg` (high-resolution NHD).
 
 # leeward 0.1.0
