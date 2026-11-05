@@ -12,7 +12,8 @@
 #'
 #' @param scores Named list of single-layer `SpatRaster`s with values in
 #'   0--1, or one multi-layer `SpatRaster`, such as [flatness_score()],
-#'   [shelter_score()], [aspect_score()], and [water_score()]. An unnamed
+#'   [shelter_score()], [aspect_score()], [water_score()],
+#'   [drainage_score()], and [canopy_score()]. An unnamed
 #'   list uses the layer names.
 #' @param weights Named non-negative numbers, one per score, with names
 #'   matching `scores`. They are scaled to sum to 1. There is no default:
@@ -20,7 +21,8 @@
 #'   skipped.
 #' @param exclusions List of logical `SpatRaster`s, or one multi-layer
 #'   logical `SpatRaster`, where `TRUE` means excluded, such as
-#'   [water_exclusion()], [channel_exclusion()], and [land_exclusion()].
+#'   [water_exclusion()], [channel_exclusion()], [flood_exclusion()], and
+#'   [land_exclusion()].
 #'   Required: pass `list()` to apply none on purpose.
 #'
 #' @return Two-layer `SpatRaster`:

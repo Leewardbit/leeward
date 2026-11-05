@@ -49,9 +49,12 @@ head(sites)
 Other suitability layers:
 \code{\link[=aspect_score]{aspect_score()}},
 \code{\link[=camp_suitability]{camp_suitability()}},
+\code{\link[=canopy_score]{canopy_score()}},
 \code{\link[=channel_exclusion]{channel_exclusion()}},
 \code{\link[=contributing_area]{contributing_area()}},
+\code{\link[=drainage_score]{drainage_score()}},
 \code{\link[=flatness_score]{flatness_score()}},
+\code{\link[=flood_exclusion]{flood_exclusion()}},
 \code{\link[=height_above_channel]{height_above_channel()}},
 \code{\link[=land_exclusion]{land_exclusion()}},
 \code{\link[=shelter_score]{shelter_score()}},

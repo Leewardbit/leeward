@@ -9,7 +9,8 @@ camp_suitability(scores, weights, exclusions)
 \arguments{
 \item{scores}{Named list of single-layer \code{SpatRaster}s with values in
 0--1, or one multi-layer \code{SpatRaster}, such as \code{\link[=flatness_score]{flatness_score()}},
-\code{\link[=shelter_score]{shelter_score()}}, \code{\link[=aspect_score]{aspect_score()}}, and \code{\link[=water_score]{water_score()}}. An unnamed
+\code{\link[=shelter_score]{shelter_score()}}, \code{\link[=aspect_score]{aspect_score()}}, \code{\link[=water_score]{water_score()}},
+\code{\link[=drainage_score]{drainage_score()}}, and \code{\link[=canopy_score]{canopy_score()}}. An unnamed
 list uses the layer names.}
 
 \item{weights}{Named non-negative numbers, one per score, with names
@@ -19,7 +20,8 @@ skipped.}
 
 \item{exclusions}{List of logical \code{SpatRaster}s, or one multi-layer
 logical \code{SpatRaster}, where \code{TRUE} means excluded, such as
-\code{\link[=water_exclusion]{water_exclusion()}}, \code{\link[=channel_exclusion]{channel_exclusion()}}, and \code{\link[=land_exclusion]{land_exclusion()}}.
+\code{\link[=water_exclusion]{water_exclusion()}}, \code{\link[=channel_exclusion]{channel_exclusion()}}, \code{\link[=flood_exclusion]{flood_exclusion()}}, and
+\code{\link[=land_exclusion]{land_exclusion()}}.
 Required: pass \code{list()} to apply none on purpose.}
 }
 \value{
@@ -67,9 +69,12 @@ terra::plot(suit$suitability)
 Other suitability layers:
 \code{\link[=aspect_score]{aspect_score()}},
 \code{\link[=candidate_areas]{candidate_areas()}},
+\code{\link[=canopy_score]{canopy_score()}},
 \code{\link[=channel_exclusion]{channel_exclusion()}},
 \code{\link[=contributing_area]{contributing_area()}},
+\code{\link[=drainage_score]{drainage_score()}},
 \code{\link[=flatness_score]{flatness_score()}},
+\code{\link[=flood_exclusion]{flood_exclusion()}},
 \code{\link[=height_above_channel]{height_above_channel()}},
 \code{\link[=land_exclusion]{land_exclusion()}},
 \code{\link[=shelter_score]{shelter_score()}},

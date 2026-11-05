@@ -145,6 +145,44 @@ The red area combines both exclusions. It is a minimum hazard area: a 10 m
 DEM cannot show narrow gullies or culverts. Cells that drain off the DEM
 without reaching a channel are `NA`, which means unknown, not safe.
 
+## Soils and canopy
+
+SSURGO soil map units give a drainage score and a flooding exclusion. The
+bundled polygons come from the USDA Soil Data Access service
+(`data-raw/vesuvius_soils_canopy.R` shows the query).
+
+```{r}
+soils <- terra::vect(
+  system.file("extdata", "vesuvius_soils.gpkg", package = "leeward")
+)
+drainage <- drainage_score(dem, soils)
+flooding <- flood_exclusion(dem, soils)
+terra::plot(c(drainage, flooding))
+```
+
+`flood_exclusion()` uses `flodfreqmax`, the most frequent flooding class of
+any soil component, so a flood-prone strip inside a mostly dry map unit
+still counts. Here the frequently flooded soils are the floodplains along
+the mapped streams, which the water setback and channel layers already
+cover: the flood layer adds about 0.2% of the area. Its value is on wide
+floodplains, where 61 m and 3 m are not enough.
+
+Tree canopy cover comes as 30 m percent cover. Project it to the DEM grid
+first. Choose whether cover helps (shelter, shade) or hurts (views,
+falling limbs):
+
+```{r}
+canopy <- terra::rast(
+  system.file("extdata", "vesuvius_canopy.tif", package = "leeward")
+)
+canopy <- terra::project(canopy, dem, method = "bilinear")
+cover <- canopy_score(canopy, open = 20, closed = 70, prefer = "cover")
+terra::plot(cover)
+```
+
+Around Lake Vesuvius most of the ground is closed forest, so both layers
+vary little here. Neither can see dead trees: look up before you pitch.
+
 ## Putting it together
 
 `camp_suitability()` takes a weighted mean of the scores and applies every
@@ -156,10 +194,13 @@ these are examples, so set your own for the trip.
 shelter <- shelter_score(sx, exposed = 0, sheltered = 10)
 suit <- camp_suitability(
   scores = list(
-    shelter = shelter, flat = flat, aspect = facing, water = access
+    shelter = shelter, flat = flat, aspect = facing, water = access,
+    drainage = drainage, cover = cover
   ),
-  weights = c(shelter = 2, flat = 3, aspect = 1, water = 1),
-  exclusions = list(excluded, low)
+  weights = c(
+    shelter = 2, flat = 3, aspect = 1, water = 1, drainage = 1, cover = 1
+  ),
+  exclusions = list(excluded, low, flooding)
 )
 terra::plot(suit$suitability, main = "Suitability (example weights)")
 ```
@@ -172,6 +213,12 @@ head(as.data.frame(sites))
 terra::plot(suit$suitability, main = "Candidate areas, rank 1-10")
 terra::plot(sites[sites$rank <= 10], add = TRUE, border = "red", lwd = 2)
 ```
+
+A fixed `min_score` depends on the layers you include. Drainage and
+canopy score near 1 almost everywhere here, so adding them lifts every
+weighted mean: candidates at 0.7 went from 83 without them to 204 with
+them. Compare ranks, give near-constant layers small weights, or raise
+`min_score` when you add layers.
 
 These are **candidate areas to scout**, not campsites. Edge bands from
 `max_dist`, the exclusions, and the 10 m grid all limit what the model can
@@ -190,6 +237,13 @@ terra::plot(tx, main = "TOPEX, 500 m")
 ```
 
 ## References
+
+Soil Survey Staff, Natural Resources Conservation Service. Flooding
+Frequency Class (Maximum). Web Soil Survey map documentation.
+<https://www.nrcs.usda.gov/sites/default/files/2023-05/FloodingFrequency_Maximum.pdf>
+
+USDA Forest Service (2023). USFS NLCD Percent Tree Canopy CONUS v2021-4.
+Sioux Falls, SD.
 
 Nobre, A. D., Cuartas, L. A., Hodnett, M., Rennó, C. D., Rodrigues, G.,
 Silveira, A., Waterloo, M., & Saleska, S. (2011). Height Above the Nearest

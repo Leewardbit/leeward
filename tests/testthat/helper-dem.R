@@ -50,3 +50,5 @@ square <- function(size) {
     crs = "EPSG:32617"
   )
 }
+
+canopy_row <- function() dem_from_matrix(matrix(c(0, 20, 45, 70, 100), 1))

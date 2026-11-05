@@ -12,8 +12,10 @@ development version adds v0.2 terrain and water layers: `flatness_score()`,
 `aspect_score()`, `water_distance()`, `water_score()`,
 `water_exclusion()`, and DEM-derived channels: `contributing_area()`,
 `height_above_channel()`, and `channel_exclusion()`. It also adds the first v0.3
-pieces: `shelter_score()`, `land_exclusion()`, `camp_suitability()`, and
-`candidate_areas()`.
+pieces: `shelter_score()`, `drainage_score()`, `flood_exclusion()`,
+`canopy_score()`, `land_exclusion()`, `camp_suitability()`, and
+`candidate_areas()`. Run `help(package = "leeward")` or `?leeward` for an
+overview.
 
 ## What it does
 
@@ -31,8 +33,9 @@ pieces: `shelter_score()`, `land_exclusion()`, `camp_suitability()`, and
    scores with explicit weights (there are no defaults) and applies every
    exclusion as a hard rule. `candidate_areas()` ranks the best patches as
    polygons: candidate areas to scout. `land_exclusion()` turns your own
-   land-status polygons into an exclusion. Canopy and soil drainage layers
-   are next.
+   land-status polygons into an exclusion. `drainage_score()` and
+   `flood_exclusion()` use SSURGO soils, and `canopy_score()` uses tree
+   canopy cover.
 
 ## Example
 
@@ -71,6 +74,13 @@ The DEM and wind files are built by `data-raw/wayne_vesuvius.R`.
   (public domain). Built by `data-raw/vesuvius_water.R`. Many small
   side hollows have no mapped channel, though they may carry ephemeral
   flow; `height_above_channel()` finds them from the DEM.
+- `vesuvius_soils.gpkg`: SSURGO soil map units (layer `mapunits`) with
+  drainage class and flooding frequency from the `muaggatt` table, from the
+  USDA-NRCS Soil Data Access service (public domain). Built by
+  `data-raw/vesuvius_soils_canopy.R`.
+- `vesuvius_canopy.tif`: NLCD Tree Canopy Cover 2021 (v2021-4), percent,
+  30 m, reprojected to UTM 17N with nearest neighbor. USDA Forest Service
+  (2023), usable without permission or fees. Built by the same script.
 - `ridge.tif`: a synthetic ridge used in function examples.
 
 ## Direction convention

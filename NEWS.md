@@ -20,6 +20,12 @@
 * `candidate_areas()` returns ranked polygons of the best patches: candidate
   areas to scout, not campsites.
 * `shelter_score()` turns Sx or TOPEX into a 0--1 score.
+* `drainage_score()` scores SSURGO drainage class, and `flood_exclusion()`
+  excludes soils that flood (by default Occasional or more often, using the
+  most frequent class of any component). Unknown classes are an error.
+* `canopy_score()` scores percent tree canopy, toward cover or open ground.
+* New example data: `vesuvius_soils.gpkg` (SSURGO) and `vesuvius_canopy.tif`
+  (NLCD Tree Canopy Cover 2021).
 * `land_exclusion()` builds an exclusion from user-supplied allowed and
   prohibited polygons. It errs toward exclusion and is a filter, not a
   statement of the law.

@@ -2,6 +2,7 @@ ASOS
 Amazonia
 Benoit
 CMD
+CONUS
 CRS
 Catena
 Cuartas
@@ -17,6 +18,8 @@ Hydrometeorology
 Ironton
 Mesonet
 NHD
+NLCD
+NRCS
 Nobre
 Planchon
 Plattner
@@ -26,6 +29,7 @@ Rodrigues
 Rsagacmd
 Ruel
 SRTM
+SSURGO
 Saleska
 Silveira
 Soares
@@ -54,6 +58,7 @@ hydrologically
 lidar
 openair
 rainforest
+reprojected
 ridgeline
 ridgelines
 riem
